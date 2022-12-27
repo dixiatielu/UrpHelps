@@ -1,6 +1,7 @@
 import hashlib
 import json
 import os.path
+import ddddocr
 
 from PIL import Image
 from Modules.staticINF import *
@@ -47,14 +48,20 @@ def urps_logi():
     if not os.path.exists("Configs"):
         os.mkdir("Configs")
     print("[验证码获取]：", http_caps.status_code, "(此处200为正常)")
-    with open('Configs/code.jpg', 'wb') as http_capf:
-        http_capf.write(http_caps.content)
-        http_capf.close()
-    http_capi = Image.open('Configs/code.jpg')
-    http_capi.show()
-    print()
-    http_code = input("[输入验证码]：")
-    print()
+    # with open('Configs/code.jpg', 'wb') as http_capf:
+    #     http_capf.write(http_caps.content)
+    #     http_capf.close()
+    # http_capi = Image.open('Configs/code.jpg')
+    # http_capi.show()
+    # print()
+    # http_code = input("[输入验证码]：")
+    # print()
+
+    # 尝试ddddocr自动识别验证码，需要Python3.8以上
+
+    ocr = ddddocr.DdddOcr()
+    http_code = ocr.classification(http_caps.content)
+    print("识别到验证码为",http_code)
     try:
         config_flag = True
         with open("Configs/config.ini", 'r') as config_file:
